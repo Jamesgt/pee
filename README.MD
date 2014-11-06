@@ -9,14 +9,6 @@ using pee | by hand
 `source.emitLater 'event', data, 100` | `do (data) -> setTimeout (source.emit 'event', data), 100`
 `source.emitEvery 'event', data, 100` | `do (data) -> setInterval (source.emit 'event', data), 100`
 
-    emitLater: (name, args...) ->
-      args.unshift null unless args.length < 2
-      setTimeout (=> @emit name, args[0]), args[1]
-
-    emitEvery: (name, args...) ->
-      args.unshift null unless args.length < 2
-      setInterval (=> @emit name, args[0]), args[1]
-
 Can register a delegate which emits the received event to target.
 
 using pee | by hand
