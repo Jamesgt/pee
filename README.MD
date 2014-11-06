@@ -1,44 +1,33 @@
 # Pee - Pass Event Emitter
 
-Just another dead simple Event Emitter with some routing infrastructure.
+Just another dead simple event emitter and some fancy shortcut.
 
-## Motivation
+Can emit the event delayed.
 
-Lets assume that in the current scope you have two EE instances and neither have reference to the other. If you want to keep this but want to send event from one to the other then `pass` comes handy.
+using pee | by hand
+--------- | -------
+`source.emitLater 'event', data, 100` | `do (data) -> setTimeout (source.emit 'event', data), 100`
+`source.emitEvery 'event', data, 100` | `do (data) -> setInterval (source.emit 'event', data), 100`
 
-```coffee-script
-->
-  @a = new ClassA() # class ClassA extends PassEventEmitter
-  @b = new ClassB() # class ClassB extends EventEmitter
-  @c = new ClassC() # class ClassC extends EventEmitter
+    emitLater: (name, args...) ->
+      args.unshift null unless args.length < 2
+      setTimeout (=> @emit name, args[0]), args[1]
 
-  @b.on 'event1', (e) -> console.log 'b event1 ' + e
-  @b.on 'event2', (e) -> console.log 'b event2 ' + e
-  @c.on 'event1', (e) -> console.log 'c event1 ' + e
-  @c.on 'event2', (e) -> console.log 'c event2 ' + e
+    emitEvery: (name, args...) ->
+      args.unshift null unless args.length < 2
+      setInterval (=> @emit name, args[0]), args[1]
 
-  @a.pass 'event1 event2', @b, @c
+Can register a delegate which emits the received event to target.
 
-  @a.emit 'event1', '1'
-  @a.emit 'event2', '2'
-```
-
-Outputs
-
-```
-b event1 1
-c event1 1
-b event2 2
-c event2 2
-```
-
-Nothing fancy, it just registers four `on` listeners for `a` with all events listed in the first argument and these re-`emit` the event to all the other arguments, so simple delegation happens here.
-
-Other convinient features:
-
-* on `null` or empty string it does nothing
-* when a target is `null` it is simply skipped
+using pee | by hand
+--------- | -------
+`source.pass 'event', target` | `source.on 'event', (e) -> target.emit e`
+`source.pass 'e1 e2', target` | `source.on 'e1', (e) -> target.emit e` <br/> `source.on 'e2', (e) -> target.emit e`
+`source.pass 'e1 e2', t1, t2` or <br/> `source.pass 'e1 e2', [t1, t2]` | `source.on 'e1', (e) -> t1.emit e` <br/> `source.on 'e2', (e) -> t1.emit e` <br/> `source.on 'e1', (e) -> t2.emit e` <br/> `source.on 'e2', (e) -> t2.emit e`
+`source.pass 'e1': t1, 'e2': t2` | `source.on 'e1', (e) -> t1.emit e` <br/> `source.on 'e2', (e) -> t2.emit e`
 
 ## License
 
 MIT
+
+dist/PassEventEmitter.browser.min.js is generated with browserify, that uses a package with also an MIT license.
