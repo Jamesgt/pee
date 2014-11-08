@@ -127,3 +127,11 @@ Tests for PassEventEmitter class.
 
 					ee1.pass 'event2', [null, ee2, null]
 					ee1.emit 'event2'
+
+				it 'should handle not EE targets', ->
+					fakeEE = {}
+					ee = new PassEventEmitter()
+
+					ee.pass 'event', fakeEE
+
+					ee.emit 'event'

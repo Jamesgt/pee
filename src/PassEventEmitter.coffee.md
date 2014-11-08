@@ -33,6 +33,6 @@ using pee | by hand
 			return unless targets?
 			@pass names, moreTargets if moreTargets.length > 0
 			for name in names.split ' ' when name isnt ''
-				for target in (if Array.isArray targets then targets else [targets]) when target?
+				for target in (if Array.isArray targets then targets else [targets]) when target?.on?
 					do (name, target) => @on name, (e) -> target.emit name, e
 			return
