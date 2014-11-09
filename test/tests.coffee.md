@@ -5,8 +5,8 @@ Node tests.
 Tests for PassEventEmitter class.
 
 	describe 'PassEventEmitter', ->
-		PassEventEmitter = require '../src/PassEventEmitter.coffee.md'
-		EventRecorderEventEmitter = require './EventRecorderEventEmitter.coffee.md'
+		{PassEventEmitter} = require '../src/PassEventEmitter.coffee.md'
+		{EventRecorderEventEmitter} = require './EventRecorderEventEmitter.coffee.md'
 
 		describe '#emit(), on()', ->
 

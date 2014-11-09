@@ -2,7 +2,7 @@ Just another dead simple event emitter and some fancy shortcut.
 
 	{EventEmitter} = require 'events'
 
-	module.exports = class PassEventEmitter extends EventEmitter
+	class exports.PassEventEmitter extends EventEmitter
 
 Emits the event delayed.
 

@@ -1,8 +1,8 @@
 EventRecorderEventEmitter test helper class.
 
-	PassEventEmitter = require '../src/PassEventEmitter.coffee.md'
+	{PassEventEmitter} = require '../src/PassEventEmitter.coffee.md'
 
-	module.exports = class EventRecorderEventEmitter extends PassEventEmitter
+	class exports.EventRecorderEventEmitter extends PassEventEmitter
 
 Be very careful to feed the ctor with the least expected values.
 If `['1', '2', '3']` is given, but only `'1'` and `'2'` arrives it won't run the final check.
