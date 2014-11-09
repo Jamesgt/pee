@@ -5,37 +5,6 @@ Just another dead simple event emitter and some fancy shortcut.
 * Emit events delayed.
 * Route events.
 
-# API
-
-PassEventEmitter is inherited form [EventEmitter class](http://nodejs.org/api/events.html) so all of its functions are usable.
-
-* Emits the event delayed.
-```coffee-script
-.emitLater(event, data, timeout)
-```
-
-* Emits the event every *timeout* ms.
-```coffee-script
-.emitEvery(event, data, timeout)
-```
-
-using pee | by hand
---------- | -------
-`source.emitLater 'event', data, 100` | `do (data) -> setTimeout (source.emit 'event', data), 100`
-`source.emitEvery 'event', data, 100` | `do (data) -> setInterval (source.emit 'event', data), 100`
-
-* Registers a delegate which emits the received event to target.
-```coffee-script
-.pass(events, targets)
-```
-
-using pee | by hand
---------- | -------
-`source.pass 'event', target` | `source.on 'event', (e) -> target.emit e`
-`source.pass 'e1 e2', target` | `source.on 'e1', (e) -> target.emit e` <br/> `source.on 'e2', (e) -> target.emit e`
-`source.pass 'e1 e2', t1, t2` <br/> or <br/> `source.pass 'e1 e2', [t1, t2]` | `source.on 'e1', (e) -> t1.emit e` <br/> `source.on 'e2', (e) -> t1.emit e` <br/> `source.on 'e1', (e) -> t2.emit e` <br/> `source.on 'e2', (e) -> t2.emit e`
-`source.pass 'e1': t1, 'e2': t2` | `source.on 'e1', (e) -> t1.emit e` <br/> `source.on 'e2', (e) -> t2.emit e`
-
 ## Examples
 
 Coffee-script example.
@@ -78,6 +47,98 @@ Javascript example.
     ee1 data
     ee2 data
     */
+```
+
+# API
+
+PassEventEmitter is inherited form [EventEmitter class](http://nodejs.org/api/events.html) so all of its functions are usable.
+
+```coffee-script
+.emitLater(event, data, timeout)
+```
+
+Emits the event delayed.
+
+using pee | by hand
+--------- | -------
+`source.emitLater 'event', data, 100` | `do (data) -> setTimeout (source.emit 'event', data), 100`
+
+```coffee-script
+.emitEvery(event, data, timeout)
+```
+
+Emits the event every *timeout* ms.
+
+using pee | by hand
+--------- | -------
+`source.emitEvery 'event', data, 100` | `do (data) -> setInterval (source.emit 'event', data), 100`
+
+```coffee-script
+.pass(events, targets)
+```
+
+Registers a delegate which emits the received event to target.
+
+using pee | by hand
+--------- | -------
+`source.pass 'event', target` | `source.on 'event', (e) -> target.emit e`
+`source.pass 'e1 e2', target` | `source.on 'e1', (e) -> target.emit e` <br/> `source.on 'e2', (e) -> target.emit e`
+`source.pass 'e1 e2', t1, t2` <br/> or <br/> `source.pass 'e1 e2', [t1, t2]` | `source.on 'e1', (e) -> t1.emit e` <br/> `source.on 'e2', (e) -> t1.emit e` <br/> `source.on 'e1', (e) -> t2.emit e` <br/> `source.on 'e2', (e) -> t2.emit e`
+`source.pass 'e1': t1, 'e2': t2` | `source.on 'e1', (e) -> t1.emit e` <br/> `source.on 'e2', (e) -> t2.emit e`
+
+```coffee-script
+# Static call
+PassEventEmitter.pass(class, events, targets)
+```
+
+Registers route for a delegate which emits the received event to target. The route is created when an instance of class is created.
+
+**using pee**
+```coffee-script
+class ClassA extends PassEventEmitter
+target = new PassEventEmitter()
+target.on 'event', (e) -> console.log 'target.event', e
+
+PassEventEmitter.pass ClassA, 'event', target
+
+new ClassA().emit 'event', 'a1'
+new ClassA().emit 'event', 'a2'
+new ClassA().emit 'event', 'a3'
+
+PassEventEmitter.removeAllRoutes() # to avoid leak
+
+###
+Outputs
+target.event a1
+target.event a2
+target.event a3
+###
+```
+
+**by hand**
+```coffee-script
+class ClassA extends EventEmitter
+target = new EventEmitter()
+target.on 'event', (e) -> console.log 'target.event', e
+
+pass = (e) -> target.emit 'event', e
+
+a1 = new ClassA()
+a1.on 'event', pass
+a1.emit 'event', 'a1'
+a2 = new ClassA()
+a2.on 'event', pass
+a2.emit 'event', 'a2'
+a3 = new ClassA()
+a3.on 'event', pass
+a3.emit 'event', 'a3'
+
+###
+Outputs
+target.event a1
+target.event a2
+target.event a3
+###
 ```
 
 ## License
