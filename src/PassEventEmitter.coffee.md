@@ -28,11 +28,11 @@ using pee | by hand
 `source.pass 'e1 e2', t1, t2` <br/> or <br/> `source.pass 'e1 e2', [t1, t2]` | `source.on 'e1', (e) -> t1.emit e` <br/> `source.on 'e2', (e) -> t1.emit e` <br/> `source.on 'e1', (e) -> t2.emit e` <br/> `source.on 'e2', (e) -> t2.emit e`
 `source.pass 'e1': t1, 'e2': t2` | `source.on 'e1', (e) -> t1.emit e` <br/> `source.on 'e2', (e) -> t2.emit e`
 
-		pass: (names, targets, moreTargets...) ->
-			return @pass name, t for own name, t of names if names is Object(names) and not targets?
-			return unless targets?
+		pass: (names, target, moreTargets...) ->
+			return @pass name, t for own name, t of names if names is Object(names) and not target?
+			return unless target?
 			@pass names, moreTargets if moreTargets.length > 0
 			for name in names.split ' ' when name isnt ''
-				for target in (if Array.isArray targets then targets else [targets]) when target?.on?
-					do (name, target) => @on name, (e) -> target.emit name, e
+				for t in (if Array.isArray target then target else [target]) when t?.on?
+					do (name, t) => @on name, (e) -> t.emit name, e
 			return
