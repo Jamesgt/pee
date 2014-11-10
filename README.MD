@@ -19,7 +19,7 @@ Coffee-script example.
 
     ee2.pass 'event', ee1
 
-    ee1.emit 'event'
+    ee1.emit 'event', 'data'
 
     ###
     Output is:
@@ -40,7 +40,7 @@ Javascript example.
 
     ee2.pass('event', ee1);
 
-    ee1.emit('event');
+    ee1.emit('event', 'data');
 
     /*
     Output is:
@@ -53,6 +53,8 @@ Javascript example.
 
 PassEventEmitter is inherited form [EventEmitter class](http://nodejs.org/api/events.html) so all of its functions are usable.
 
+## .emitLater(event, data, timeout)
+
 ```coffee-script
 .emitLater(event, data, timeout)
 ```
@@ -63,6 +65,8 @@ using pee | by hand
 --------- | -------
 `source.emitLater 'event', data, 100` | `do (data) -> setTimeout (source.emit 'event', data), 100`
 
+## .emitEvery(event, data, timeout)
+
 ```coffee-script
 .emitEvery(event, data, timeout)
 ```
@@ -72,6 +76,8 @@ Emits the event every *timeout* ms.
 using pee | by hand
 --------- | -------
 `source.emitEvery 'event', data, 100` | `do (data) -> setInterval (source.emit 'event', data), 100`
+
+## .pass(events, targets)
 
 ```coffee-script
 .pass(events, targets)
@@ -86,9 +92,10 @@ using pee | by hand
 `source.pass 'e1 e2', t1, t2` <br/> or <br/> `source.pass 'e1 e2', [t1, t2]` | `source.on 'e1', (e) -> t1.emit e` <br/> `source.on 'e2', (e) -> t1.emit e` <br/> `source.on 'e1', (e) -> t2.emit e` <br/> `source.on 'e2', (e) -> t2.emit e`
 `source.pass 'e1': t1, 'e2': t2` | `source.on 'e1', (e) -> t1.emit e` <br/> `source.on 'e2', (e) -> t2.emit e`
 
+## *static* PassEventEmitter.pass(class, events, targets)
+
 ```coffee-script
-# Static call
-PassEventEmitter.pass(class, events, targets)
+PassEventEmitter.pass(class, events, targets) # Static call
 ```
 
 Registers route for a delegate which emits the received event to target. The route is created when an instance of class is created.
