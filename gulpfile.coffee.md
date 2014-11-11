@@ -40,6 +40,7 @@ Build file.
 	.task 'dist', ->
 		gulp.src './src/PassEventEmitter.coffee.md'
 		.pipe coffee()
+		.pipe gulp.dest './dist'
 		.pipe uglify()
 		.pipe rename 'PassEventEmitter.min.js'
 		.pipe gulp.dest './dist'

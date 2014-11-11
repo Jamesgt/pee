@@ -1,6 +1,6 @@
 {
   "name": "pee",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Pass event emitter",
   "directories": {
     "test": "test"
@@ -21,6 +21,7 @@
     "event",
     "emitter"
   ],
+  "main": "dist/PassEventEmitter",
   "author": "Jamesgt",
   "license": "MIT",
   "devDependencies": {
