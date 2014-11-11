@@ -40,7 +40,7 @@
     PassEventEmitter.prototype.emitLater = function() {
       var args, name;
       name = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      if (!(args.length < 2)) {
+      if (args.length < 2) {
         args.unshift(null);
       }
       return setTimeout(((function(_this) {
@@ -53,7 +53,7 @@
     PassEventEmitter.prototype.emitEvery = function() {
       var args, name;
       name = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      if (!(args.length < 2)) {
+      if (args.length < 2) {
         args.unshift(null);
       }
       return setInterval(((function(_this) {

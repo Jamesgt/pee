@@ -1,6 +1,6 @@
 {
   "name": "pee",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Pass event emitter",
   "directories": {
     "test": "test"
