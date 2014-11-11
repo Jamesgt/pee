@@ -21,11 +21,11 @@ Just another dead simple event emitter and some fancy shortcut.
 			PassEventEmitter.postEmitHook? @.constructor, event, data
 
 		emitLater: (name, args...) ->
-			args.unshift null unless args.length < 2
+			args.unshift null if args.length < 2
 			setTimeout (=> @emit name, args[0]), args[1]
 
 		emitEvery: (name, args...) ->
-			args.unshift null unless args.length < 2
+			args.unshift null if args.length < 2
 			setInterval (=> @emit name, args[0]), args[1]
 
 		pass: (names, targets...) ->
