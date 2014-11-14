@@ -1,6 +1,6 @@
 # Pee - Pass Event Emitter
 
-Just another dead simple event emitter and some fancy shortcut.
+Event emitter with some fancy shortcut.
 
 * Emit events delayed.
 * Route events.
@@ -92,13 +92,23 @@ using pee | by hand
 `source.pass 'e1 e2', t1, t2` <br/> or <br/> `source.pass 'e1 e2', [t1, t2]` | `source.on 'e1', (e) -> t1.emit e` <br/> `source.on 'e2', (e) -> t1.emit e` <br/> `source.on 'e1', (e) -> t2.emit e` <br/> `source.on 'e2', (e) -> t2.emit e`
 `source.pass 'e1': t1, 'e2': t2` | `source.on 'e1', (e) -> t1.emit e` <br/> `source.on 'e2', (e) -> t2.emit e`
 
+## *static* PassEventEmitter.getGlobal()
+
+```coffee-script
+PassEventEmitter.getGlobal() # Static call
+```
+
+Returns a global PassEventEmitter instance.
+
 ## *static* PassEventEmitter.pass(class, events, targets)
 
 ```coffee-script
 PassEventEmitter.pass(class, events, targets) # Static call
 ```
 
-Registers route for a delegate which emits the received event to target. The route is created when an instance of class is created.
+If class is given, then it registers a route for a delegate which emits the received event to target. The route is created when an instance of class is created.
+
+*Note:* If class is not given it passes the event to the global emitter. Same as `PassEventEmitter.getGlobal().pass('e', pee)`.
 
 **using pee**
 ```coffee-script

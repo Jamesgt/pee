@@ -48,7 +48,6 @@ Tests for PassEventEmitter class.
 					ee2.on 'event1', ee2.getHandler (e) -> e.should.equal 'data1'
 					ee2.on 'event2', ee2.getHandler (e) -> e.should.equal 'data2'
 
-					console.log 'events', events
 					ee1.pass events, ee2
 
 					ee1.listeners('event1').length.should.equal 2
@@ -195,3 +194,26 @@ Tests for PassEventEmitter class.
 				test2.emit 'event', 'data'
 
 				ee.eventsReceived.length.should.equal 1 # not changed
+
+			it 'should pass a simple event to the global emitter', ->
+				expected = []
+				ee = new PassEventEmitter()
+				PassEventEmitter.getGlobal().on 'event', (e) =>
+					expected.push 'PEE.static'
+					e.should.equal 'data'
+
+				class Test extends PassEventEmitter
+				Test.getGlobal().on 'event', (e) =>
+					expected.push 'Test.static'
+					e.should.equal 'data'
+
+				inherited = new Test()
+				inherited.on 'event', (e) ->
+					expected.push 'inherited'
+					e.should.equal 'data'
+
+				Test.pass 'event', inherited
+
+				Test.getGlobal().emit 'event', 'data'
+
+				expected.join(',').should.equal 'PEE.static,Test.static,inherited'

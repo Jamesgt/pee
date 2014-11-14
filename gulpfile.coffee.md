@@ -8,6 +8,8 @@ Build file.
 	mochaPhantomJs = require 'gulp-mocha-phantomjs'
 	uglify = require 'gulp-uglify'
 	rename = require 'gulp-rename'
+	bump = require 'gulp-bump'
+	docco = require 'gulp-docco'
 
 	coffeeCompiler = browserify transform: ['coffeeify'], extensions: ['.coffee.md']
 	coffeeCompiler.on 'error', (e) ->
@@ -38,6 +40,10 @@ Build file.
 	.task 'test', ['test-node', 'test-browser']
 
 	.task 'dist', ->
+		gulp.src './package.json'
+		.pipe bump()
+		.pipe gulp.dest './'
+
 		gulp.src './src/PassEventEmitter.coffee.md'
 		.pipe coffee()
 		.pipe gulp.dest './dist'
@@ -50,3 +56,7 @@ Build file.
 		.pipe uglify()
 		.pipe rename 'PassEventEmitter.browser.min.js'
 		.pipe gulp.dest './dist'
+
+		gulp.src './src/PassEventEmitter.coffee.md'
+		.pipe docco layout: 'linear'
+		.pipe gulp.dest './docs'
